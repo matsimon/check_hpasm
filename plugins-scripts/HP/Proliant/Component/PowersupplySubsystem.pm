@@ -12,6 +12,7 @@ sub new {
     rawdata => $params{rawdata},
     method => $params{method},
     condition => $params{condition},
+    errorcondition => $params{errorcondition},
     status => $params{status},
     powersupplies => [],
     powerconverters => [],
@@ -66,6 +67,7 @@ sub new {
     cpqHeFltTolPowerSupplyBay => $params{cpqHeFltTolPowerSupplyBay},
     cpqHeFltTolPowerSupplyPresent => $params{cpqHeFltTolPowerSupplyPresent},
     cpqHeFltTolPowerSupplyCondition => $params{cpqHeFltTolPowerSupplyCondition},
+    cpqHeFltTolPowerSupplyErrorCondition => $params{cpqHeFltTolPowerSupplyErrorCondition},
     cpqHeFltTolPowerSupplyRedundant => $params{cpqHeFltTolPowerSupplyRedundant},
     cpqHeFltTolPowerSupplyCapacityUsed => $params{cpqHeFltTolPowerSupplyCapacityUsed} || 0,
     cpqHeFltTolPowerSupplyCapacityMaximum => $params{cpqHeFltTolPowerSupplyCapacityMaximum} || 0,
@@ -88,7 +90,8 @@ sub check {
       } else {
         $self->add_info(sprintf "powersupply %d needs attention (%s)",
             $self->{cpqHeFltTolPowerSupplyBay},
-            $self->{cpqHeFltTolPowerSupplyCondition});
+            $self->{cpqHeFltTolPowerSupplyCondition},
+            $self->{cpqHeFltTolPowerSupplyErrorCondition});
       }
       $self->add_message(CRITICAL, $self->{info});
     } else {
@@ -98,7 +101,8 @@ sub check {
     }
     $self->add_extendedinfo(sprintf "ps_%s=%s",
         $self->{cpqHeFltTolPowerSupplyBay},
-        $self->{cpqHeFltTolPowerSupplyCondition});
+        $self->{cpqHeFltTolPowerSupplyCondition},
+        $self->{cpqHeFltTolPowerSupplyErrorCondition});
     if ($self->{cpqHeFltTolPowerSupplyCapacityUsed} &&
         $self->{cpqHeFltTolPowerSupplyCapacityMaximum}) {
       if ($self->{runtime}->{options}->{perfdata}) {
@@ -132,7 +136,7 @@ sub dump {
   my $self = shift;
   printf "[PS_%s]\n", $self->{cpqHeFltTolPowerSupplyBay};
   foreach (qw(cpqHeFltTolPowerSupplyBay cpqHeFltTolPowerSupplyChassis
-      cpqHeFltTolPowerSupplyPresent cpqHeFltTolPowerSupplyCondition
+      cpqHeFltTolPowerSupplyPresent cpqHeFltTolPowerSupplyCondition cpqHeFltTolPowerSupplyErrorCondition
       cpqHeFltTolPowerSupplyRedundant cpqHeFltTolPowerSupplyCapacityUsed
       cpqHeFltTolPowerSupplyCapacityMaximum)) {
     printf "%s: %s\n", $_, $self->{$_};

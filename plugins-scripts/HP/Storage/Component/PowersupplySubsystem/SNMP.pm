@@ -30,6 +30,7 @@ sub init {
   my $cpqHeFltTolPowerSupplyPresent = "1.3.6.1.4.1.232.6.2.9.3.1.3";
   my $cpqHeFltTolPowerSupplyCondition = "1.3.6.1.4.1.232.6.2.9.3.1.4";
   my $cpqHeFltTolPowerSupplyRedundant = "1.3.6.1.4.1.232.6.2.9.3.1.9";
+  my $cpqHeFltTolPowerSupplyErrorCondition = "1.3.6.1.4.1.232.6.2.9.3.1.18";
   my $cpqSeCpuStatus = "1.3.6.1.4.1.232.1.2.2.1.1.6";
   my $cpqHeFltTolPowerSupplyPresentValues = {
       1 => "other",
@@ -46,6 +47,23 @@ sub init {
       1 => "other",
       2 => "notRedundant",
       3 => "redundant",
+  };
+  my cpqHeFltTolPowerSupplyErrorConditionValue => {
+      1 => "noError",
+      2 => "generalFailure",
+      3 => "overvoltage",
+      4 => "overcurrent",
+      5 => "overtemperature",
+      6 => "powerinputloss",
+      7 => "fanfailure",
+      8 => "vinhighwarning",
+      9 => "vinlowwarning",
+     10 => "vouthighwarning",
+     11 => "voutlowwarning",
+     12 => "inlettemphighwarning",
+     13 => "iinternaltemphighwarning",
+     14 => "vauxhighwarning",
+     15 => "vauxlowwarning",
   };
 
   # INDEX { cpqHeFltTolPowerSupplyChassis, cpqHeFltTolPowerSupplyBay }
@@ -72,6 +90,11 @@ sub init {
         lc SNMP::Utils::get_object_value(
             $snmpwalk, $cpqHeFltTolPowerSupplyRedundant,
             $cpqHeFltTolPowerSupplyRedundantValues,
+            $idx1, $idx2),
+      errorCondition =>
+        lc SNMP::Utils::get_object_value(
+            $snmpwalk, $cpqHeFltTolPowerSupplyErrorCondition,
+            $cpqHeFltTolPowerSupplyErrorCondition,
             $idx1, $idx2),
     ));
   }

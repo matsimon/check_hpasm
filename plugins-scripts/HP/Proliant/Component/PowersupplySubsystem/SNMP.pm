@@ -33,6 +33,7 @@ sub init {
       cpqHeFltTolPowerSupplyPresent => "1.3.6.1.4.1.232.6.2.9.3.1.3",
       cpqHeFltTolPowerSupplyCondition => "1.3.6.1.4.1.232.6.2.9.3.1.4",
       cpqHeFltTolPowerSupplyRedundant => "1.3.6.1.4.1.232.6.2.9.3.1.9",
+      cpqHeFltTolPowerSupplyErrorCondition => "1.3.6.1.4.1.232.6.2.9.3.1.18",
       cpqHeFltTolPowerSupplyPresentValue => {
           1 => "other",
           2 => "absent",
@@ -50,6 +51,23 @@ sub init {
           1 => "other",
           2 => "notRedundant",
           3 => "redundant",
+      },
+      cpqHeFltTolPowerSupplyErrorConditionValue => {
+          1 => "noError",
+          2 => "generalFailure",
+          3 => "overvoltage",
+          4 => "overcurrent",
+          5 => "overtemperature",
+          6 => "powerinputloss",
+          7 => "fanfailure",
+          8 => "vinhighwarning",
+          9 => "vinlowwarning",
+         10 => "vouthighwarning",
+         11 => "voutlowwarning",
+         12 => "inlettemphighwarning",
+         13 => "iinternaltemphighwarning",
+         14 => "vauxhighwarning",
+         15 => "vauxlowwarning",
       },
   };
 

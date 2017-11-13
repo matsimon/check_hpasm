@@ -48,7 +48,7 @@ sub init {
       2 => "notRedundant",
       3 => "redundant",
   };
-  my cpqHeFltTolPowerSupplyErrorConditionValue => {
+  my $cpqHeFltTolPowerSupplyqErrorConditionValues => {
       1 => "noError",
       2 => "generalFailure",
       3 => "overvoltage",

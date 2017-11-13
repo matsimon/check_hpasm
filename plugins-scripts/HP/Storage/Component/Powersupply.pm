@@ -31,6 +31,7 @@ sub new {
     present => $params{present},
     redundant => $params{redundant},
     condition => $params{condition},
+    errorcondition => $params{errorcondition},
     blacklisted => 0,
     info => undef,
     extendexinfo => undef,
@@ -46,8 +47,10 @@ sub check {
       if ($self->{condition} eq "n/a") {
         $self->add_info(sprintf "powersupply #%d is missing", $self->{name});
       } else {
-        $self->add_info(sprintf "powersupply #%d needs attention (%s)",
-            $self->{name}, $self->{condition});
+        $self->add_info(sprintf "powersupply #%d needs attention (%s, %s)",
+            $self->{name},
+            $self->{condition},
+            $self->{errorcondition});
       }
       $self->add_message(CRITICAL, $self->{info});
     } else {
@@ -55,7 +58,9 @@ sub check {
           $self->{name}, $self->{condition});
     }
     $self->add_extendedinfo(sprintf "ps_%s=%s",
-        $self->{name}, $self->{condition});
+        $self->{name},
+        $self->{condition},
+        $self->{errorcondition});
   } else {
     $self->add_info(sprintf "powersupply #%d is %s", 
         $self->{name}, $self->{present});
@@ -72,6 +77,7 @@ sub dump {
   printf "present: %s\n", $self->{present};
   printf "redundant: %s\n", $self->{redundant};
   printf "condition: %s\n", $self->{condition};
+  printf "errorcondition: %s\n", $self->{errorcondition};
   printf "blacklisted: %s\n", $self->{blacklisted};
   printf "info: %s\n\n", $self->{info};
 }
@@ -142,6 +148,7 @@ use strict;
     my $cpqHeFltTolPowerSupplyPresent = "1.3.6.1.4.1.232.6.2.9.3.1.3";
     my $cpqHeFltTolPowerSupplyCondition = "1.3.6.1.4.1.232.6.2.9.3.1.4";
     my $cpqHeFltTolPowerSupplyRedundant = "1.3.6.1.4.1.232.6.2.9.3.1.9";
+    my $cpqHeFltTolPowerSupplyErrorCondition = "1.3.6.1.4.1.232.6.2.9.3.1.18";
     my $cpqSeCpuStatus = "1.3.6.1.4.1.232.1.2.2.1.1.6";
     my $cpqHeFltTolPowerSupplyPresentValues = {
         1 => "other",
@@ -159,6 +166,23 @@ use strict;
         2 => "notRedundant",
         3 => "redundant",
     }; 
+    my $cpqHeFltTolPowerSupplyErrorConditionValues = {
+        1 => "noError",
+        2 => "generalFailure",
+        3 => "overvoltage",
+        4 => "overcurrent",
+        5 => "overtemperature",
+        6 => "powerinputloss",
+        7 => "fanfailure",
+        8 => "vinhighwarning",
+        9 => "vinlowwarning",
+       10 => "vouthighwarning",
+       11 => "voutlowwarning",
+       12 => "inlettemphighwarning",
+       13 => "iinternaltemphighwarning",
+       14 => "vauxhighwarning",
+       15 => "vauxlowwarning",
+    };
     
     # INDEX { cpqHeFltTolPowerSupplyChassis, cpqHeFltTolPowerSupplyBay }
     my @indexes =
@@ -184,6 +208,11 @@ use strict;
           lc SNMP::Utils::get_object_value(
               $snmpwalk, $cpqHeFltTolPowerSupplyRedundant,
               $cpqHeFltTolPowerSupplyRedundantValues,
+              $idx1, $idx2),
+        errorcondition =>
+          lc SNMP::Utils::get_object_value(
+              $snmpwalk, $cpqHeFltTolPowerSupplyErrorCondition,
+              $cpqHeFltTolPowerSupplyErrorConditionValues,
               $idx1, $idx2),
       ));
     }

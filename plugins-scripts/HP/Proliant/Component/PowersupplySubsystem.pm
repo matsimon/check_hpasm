@@ -88,7 +88,7 @@ sub check {
         $self->add_info(sprintf "powersupply %d is missing",
             $self->{cpqHeFltTolPowerSupplyBay});
       } else {
-        $self->add_info(sprintf "powersupply %d needs attention (%s)",
+        $self->add_info(sprintf "powersupply %d needs attention (%s, %s)",
             $self->{cpqHeFltTolPowerSupplyBay},
             $self->{cpqHeFltTolPowerSupplyCondition},
             $self->{cpqHeFltTolPowerSupplyErrorCondition});

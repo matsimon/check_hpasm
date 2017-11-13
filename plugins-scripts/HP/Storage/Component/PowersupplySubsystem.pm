@@ -13,6 +13,7 @@ sub new {
     rawdata => $params{rawdata},
     method => $params{method},
     condition => $params{condition},
+    errorcondition => $params{errorcondition},
     status => $params{status},
     powersupplies => [],
     blacklisted => 0,
